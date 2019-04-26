@@ -3,7 +3,7 @@
 #include <numeric>
 #include <algorithm>
 #include <time.h>
-
+#include <fstream>
 using namespace std;
 
 void bubble_sort (int vetor[], int n) {
@@ -200,7 +200,41 @@ void imprimaVet(int *vet){
 }
 
 int main() {
+    ifstream myfile;
+    vector<string> strings;
+    strings.push_back("100.txt");
+    strings.push_back("200.txt");
+    strings.push_back("500.txt");
+    strings.push_back("1000.txt");
+    strings.push_back("2000.txt");
+    strings.push_back("5000.txt");
+    strings.push_back("75000.txt");
+    strings.push_back("10000.txt");
+    strings.push_back("15000.txt");
+    strings.push_back("30000.txt");
+    strings.push_back("500000.txt");
+    strings.push_back("750000.txt");
+    strings.push_back("100000.txt");
+    strings.push_back("200000.txt");
+    strings.push_back("500000.txt");
+    strings.push_back("750000.txt");
+    strings.push_back("1000000.txt");
+    strings.push_back("1250000.txt");
+    strings.push_back("2000000.txt");
+    myfile.open(("C:\\Users\\mauri\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(0)), ifstream::ate);
+    if(myfile.is_open()){
+        cout<<"dsadsad";
+    }
 
-    cout << "Hello, World!" << endl;
+    int *a;
+    cout << "a" + strings.at(0) << endl;
+    int aux;
+    for (int i = 0; myfile >> aux ; ++i) {
+        myfile>>aux;
+        a = new int;
+        a[i] = aux;
+        cout<<aux<<endl;
+    }
+
     return 0;
 }
