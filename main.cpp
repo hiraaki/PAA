@@ -75,6 +75,7 @@ void merge(vector<int> &arr, int l, int m, int r,long int &swap,long int &comp) 
     j = 0; // Initial index of second subarray
     k = l; // Initial index of merged subarray
     while (i < n1 && j < n2){
+        swap++;
         comp++;
         if (L[i] <= R[j]){
             arr[k] = L[i];
@@ -90,6 +91,7 @@ void merge(vector<int> &arr, int l, int m, int r,long int &swap,long int &comp) 
     /* Copy the remaining elements of L[], if there
        are any */
     while (i < n1){
+        swap++;
         arr[k] = L[i];
         i++;
         k++;
@@ -98,6 +100,7 @@ void merge(vector<int> &arr, int l, int m, int r,long int &swap,long int &comp) 
     /* Copy the remaining elements of R[], if there
        are any */
     while (j < n2){
+        swap++;
         arr[k] = R[j];
         j++;
         k++;
@@ -113,7 +116,9 @@ void mergeSort(vector<int> &arr, int l, int r,long int &swap,long int &comp) {
         int m = l+(r-l)/2;
 
         // Sort first and second halves
+
         mergeSort(arr, l, m, swap, comp);
+
         mergeSort(arr, m+1, r, swap, comp);
 
         merge(arr, l, m, r, swap, comp);
@@ -159,14 +164,17 @@ vector<T> counting_sort(const vector<T> &op ,long int &swap,long int &comp) {
     auto max = *max_element( op.begin(), op.end() );
 
     vector<int> contagem( max - min + 1, 0 );
-    for ( auto it = op.begin(); it != op.end(); ++it )
+    for ( auto it = op.begin(); it != op.end(); ++it ){
         ++contagem[ *it - min ];
-
+        comp++;
+    }
     partial_sum( contagem.begin(), contagem.end(), contagem.begin() );
 
     vector<T> ordenado( op.size() );
-    for ( auto it2 = op.rbegin(); it2 != op.rend(); ++it2 )
+    for ( auto it2 = op.rbegin(); it2 != op.rend(); ++it2 ){
         ordenado[ --contagem[ *it2 - min ] ] = *it2;
+        swap++;
+    }
     return ordenado;
 }
 
@@ -176,10 +184,11 @@ void BucketSort(vector<int> &data,long int &swap,long int &comp) {
     int minValue = data[0];
     int maxValue = data[0];
 
-    for (int i = 1; i < count; i++)
-    {
+    for (int i = 1; i < count; i++){
+        comp++;
         if (data[i] > maxValue)
             maxValue = data[i];
+        comp++;
         if (data[i] < minValue)
             minValue = data[i];
     }
@@ -187,25 +196,22 @@ void BucketSort(vector<int> &data,long int &swap,long int &comp) {
     int bucketLength = maxValue - minValue + 1;
     vector<int>* bucket = new vector<int>[bucketLength];
 
-    for (int i = 0; i < bucketLength; i++)
-    {
+    for (int i = 0; i < bucketLength; i++){
         bucket[i] = vector<int>();
     }
 
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++){
         bucket[data[i] - minValue].push_back(data[i]);
+        swap++;
     }
 
     int k = 0;
-    for (int i = 0; i < bucketLength; i++)
-    {
+    for (int i = 0; i < bucketLength; i++){
         int bucketSize = bucket[i].size();
 
-        if (bucketSize > 0)
-        {
-            for (int j = 0; j < bucketSize; j++)
-            {
+        if (bucketSize > 0){
+            for (int j = 0; j < bucketSize; j++){
+                swap++;
                 data[k] = bucket[i][j];
                 k++;
             }
@@ -231,38 +237,117 @@ void pushelements(vector<int> &vetor, ifstream *myfile){
     }
 }
 void copy(vector<int> &vector1,vector<int> &vector2){
-    for (int i = 0; i < vector1.size(); ++i) {
-        vector1[i] = vector2[i];
+    vector1.clear();
+    for (int i = 0; i < vector2.size(); i++) {
+        int aux = vector2[i];
+        vector1.push_back(aux);
     }
 }
-void oneforall(vector<int> &vetor,long int &swap,long int comp){
-    vector<int> ordenado(vetor.size());
-    vector<int> original(vetor.size());
 
-    copy(original,vetor);
+void oneforall(vector<int> original){
+    ofstream swapoutfile;
+    ofstream compoutfile;
+    ofstream timeoutfile;
+    swapoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\swap.csv",ios::app);
+    compoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\comp.csv",ios::app);
+    timeoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\time.csv",ios::app);
+
+    vector<int> ordenado;
+    vector<int> vetor;
+    long int swap=0;
+    long int comp=0;
+    double time;
+
+    vetor.assign(original.begin(), original.end());
+    clock_t start = clock();
     bubble_sort(vetor, swap, comp);
-    cout<<"feito p /bubble"<<endl;
-    copy(vetor,original);
+    clock_t end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
+    cout<<"feito p/ bubble"<<endl;
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     insertion_sort(vetor, swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ insertion_sort"<<endl;
-    copy(vetor,original);
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     SelectionSort(vetor, swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ SelectionSort"<<endl;
-    copy(vetor,original);
+
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     mergeSort(vetor,0,vetor.size(), swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ mergeSort"<<endl;
-    copy(vetor,original);
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     quicksort(vetor,0,vetor.size(), swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ quicksort"<<endl;
-    copy(vetor,original);
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     ordenado=counting_sort(vetor, swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<";";
+    compoutfile<<comp<<";";
+    timeoutfile<<time<<";";
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ counting_sort"<<endl;
-    copy(vetor,original);
+
+    swap=0;comp=0;time=0.0;
+    vetor.assign(original.begin(), original.end());
+    start = clock();
     BucketSort(vetor, swap, comp);
+    end = clock();
+    time = (double) (end-start) / CLOCKS_PER_SEC;
+    swapoutfile<<swap<<endl;
+    compoutfile<<comp<<endl;
+    timeoutfile<<time<<endl;
+    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
     cout<<"feito p/ BucketSort"<<endl;
+
     cout<<"feito p/ todos"<<endl;
     original.clear();
     ordenado.clear();
+    timeoutfile.close();
+    swapoutfile.close();
+    compoutfile.close();
 }
 
 
@@ -280,39 +365,29 @@ int main() {
     strings.push_back("15000.txt");
     strings.push_back("30000.txt");
     strings.push_back("50000.txt");
-    strings.push_back("75000.txt");
-    strings.push_back("100000.txt");
-    strings.push_back("200000.txt");
-    strings.push_back("500000.txt");
-    strings.push_back("750000.txt");
+    strings.push_back("75000.txt");    
     strings.push_back("100000.txt");
     strings.push_back("200000.txt");
     strings.push_back("500000.txt");
     strings.push_back("750000.txt");
     strings.push_back("1000000.txt");
     strings.push_back("1250000.txt");
+    strings.push_back("1500000.txt");
     strings.push_back("2000000.txt");
-    myfile.open(("C:\\Users\\mauri\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(0)));
-    if(!myfile.is_open()){
-        return 404;
+    for (int i = 0; i < strings.size(); i++) {
+        myfile.open(("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(i)));
+        if(!myfile.is_open()){
+            return i;
+        }
+        myfile.clear();
+        myfile.seekg(0, ios::beg);
+        vector<int> element;
+        pushelements(element,&myfile);
+        oneforall(element);
+        element.clear();
+        myfile.close();
+        cout<<"----------------------"<<i<<endl;
     }
-    myfile.clear();
-    myfile.seekg(0, ios::beg);
-    vector<int> element;
-    pushelements(element,&myfile);
-    vector<int> ordenado(element.size());
-    long int swap=0,comp=0;
-    bubble_sort(element,swap,comp);
-    cout<<swap<<" "<<comp<<endl;
-//    ordenado = counting_sort(element);
-//    element.clear();
-//    ordenado.clear();
-//    insertion_sort(element);
-//    oneforall(element);
-
-
-
-
 
     return 0;
 }
