@@ -415,6 +415,7 @@ int main() {
 //    if(!myfile.is_open()){
 //        return 15;
 //    }
+
 //    myfile.clear();
 //    myfile.seekg(0, ios::beg);
 //    vector<int> element;
