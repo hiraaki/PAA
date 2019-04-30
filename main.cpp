@@ -7,7 +7,7 @@
 #include <malloc.h>
 using namespace std;
 
-void bubble_sort (vector<int> &vetor,long int &swap, long int &comp) {
+void bubble_sort (vector<int> &vetor,unsigned long long int &swap, unsigned long long int &comp) {
     int k, j, aux;
     for (k = vetor.size() - 1; k > 0; k--) {
         for (j = 0; j < k; j++) {
@@ -23,7 +23,7 @@ void bubble_sort (vector<int> &vetor,long int &swap, long int &comp) {
 
 }
 
-void insertion_sort(vector<int> &vetor,long int &swap,long int &comp) {
+void insertion_sort(vector<int> &vetor,unsigned long long int &swap,unsigned long long int &comp) {
 
     for (int i = 1; i < vetor.size(); i++) {
         int escolhido = vetor[i];
@@ -40,7 +40,7 @@ void insertion_sort(vector<int> &vetor,long int &swap,long int &comp) {
     }
 }
 
-void SelectionSort(vector<int> &vetor,long int &swap,long int &comp) {
+void SelectionSort(vector<int> &vetor,unsigned long long int &swap,unsigned long long int &comp) {
     for (int indice = 0; indice < vetor.size(); ++indice) {
         int indiceMenor = indice;
         for (int indiceSeguinte = indice+1; indiceSeguinte < vetor.size(); ++indiceSeguinte) {
@@ -56,17 +56,19 @@ void SelectionSort(vector<int> &vetor,long int &swap,long int &comp) {
     }
 }
 
-void merge(vector<int> &arr, int l, int m, int r,long int &swap,long int &comp) {
+void merge(vector<int> &arr, int l, int m, int r,unsigned long long int &swap,unsigned long long int &comp) {
     int i, j, k;
     int n1 = m - l + 1;
     int n2 =  r - m;
 
     /* create temp arrays */
-    int L[n1], R[n2];
+    vector<int> L;
+    vector<int> R;
 
     /* Copy data to temp arrays L[] and R[] */
     for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
+        L.push_back(arr[l + i]);
+
     for (j = 0; j < n2; j++)
         R[j] = arr[m + 1+ j];
 
@@ -109,7 +111,7 @@ void merge(vector<int> &arr, int l, int m, int r,long int &swap,long int &comp) 
 
 /* l is for left index and r is right index of the
    sub-array of arr to be sorted */
-void mergeSort(vector<int> &arr, int l, int r,long int &swap,long int &comp) {
+void mergeSort(vector<int> &arr, int l, int r,unsigned long long int &swap,unsigned long long int &comp) {
     if (l < r){
         // Same as (l+r)/2, but avoids overflow for
         // large l and h
@@ -125,7 +127,7 @@ void mergeSort(vector<int> &arr, int l, int r,long int &swap,long int &comp) {
     }
 }
 
-void quicksort(vector<int> &values, int began, int end,long int &swap,long int &comp) {
+void quicksort(vector<int> &values, int began, int end,unsigned long long int &swap,unsigned long long int &comp) {
     int i, j, pivo, aux;
     i = began;
     j = end-1;
@@ -156,7 +158,7 @@ void quicksort(vector<int> &values, int began, int end,long int &swap,long int &
 }
 
 template<class T>
-vector<T> counting_sort(const vector<T> &op ,long int &swap,long int &comp) {
+vector<T> counting_sort(const vector<T> &op ,unsigned long long int &swap,unsigned long long int &comp) {
     if ( op.empty() )
         return vector<T> {};
 
@@ -179,7 +181,7 @@ vector<T> counting_sort(const vector<T> &op ,long int &swap,long int &comp) {
 }
 
 
-void BucketSort(vector<int> &data,long int &swap,long int &comp) {
+void BucketSort(vector<int> &data,unsigned long long int &swap,unsigned long long int &comp) {
     int count = data.size();
     int minValue = data[0];
     int maxValue = data[0];
@@ -235,6 +237,8 @@ void pushelements(vector<int> &vetor, ifstream *myfile){
     for(int i=0;*myfile>>aux;i++){
         vetor.push_back(aux);
     }
+    myfile->clear();
+    myfile->seekg(0);
 }
 void copy(vector<int> &vector1,vector<int> &vector2){
     vector1.clear();
@@ -254,11 +258,12 @@ void oneforall(vector<int> original){
 
     vector<int> ordenado;
     vector<int> vetor;
-    long int swap=0;
-    long int comp=0;
+    unsigned long long int swap=0;
+    unsigned long long int comp=0;
+    double time;
     double time;
 
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     clock_t start = clock();
     bubble_sort(vetor, swap, comp);
     clock_t end = clock();
@@ -270,7 +275,7 @@ void oneforall(vector<int> original){
     cout<<"feito p/ bubble"<<endl;
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     insertion_sort(vetor, swap, comp);
     end = clock();
@@ -282,7 +287,7 @@ void oneforall(vector<int> original){
     cout<<"feito p/ insertion_sort"<<endl;
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     SelectionSort(vetor, swap, comp);
     end = clock();
@@ -295,7 +300,7 @@ void oneforall(vector<int> original){
 
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     mergeSort(vetor,0,vetor.size(), swap, comp);
     end = clock();
@@ -307,7 +312,7 @@ void oneforall(vector<int> original){
     cout<<"feito p/ mergeSort"<<endl;
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     quicksort(vetor,0,vetor.size(), swap, comp);
     end = clock();
@@ -319,7 +324,7 @@ void oneforall(vector<int> original){
     cout<<"feito p/ quicksort"<<endl;
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     ordenado=counting_sort(vetor, swap, comp);
     end = clock();
@@ -331,7 +336,7 @@ void oneforall(vector<int> original){
     cout<<"feito p/ counting_sort"<<endl;
 
     swap=0;comp=0;time=0.0;
-    vetor.assign(original.begin(), original.end());
+    copy(vetor,original);
     start = clock();
     BucketSort(vetor, swap, comp);
     end = clock();
@@ -374,19 +379,47 @@ int main() {
     strings.push_back("1250000.txt");
     strings.push_back("1500000.txt");
     strings.push_back("2000000.txt");
-    for (int i = 0; i < strings.size(); i++) {
-        myfile.open(("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(i)));
-        if(!myfile.is_open()){
-            return i;
-        }
-        myfile.clear();
-        myfile.seekg(0, ios::beg);
-        vector<int> element;
-        pushelements(element,&myfile);
-        oneforall(element);
-        element.clear();
-        myfile.close();
-        cout<<"----------------------"<<i<<endl;
+//    for (int i = 15; i < strings.size(); i++) {
+//        myfile.open(("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(i)));
+//        if(!myfile.is_open()){
+//            return i;
+//        }
+//        myfile.clear();
+//        myfile.seekg(0, ios::beg);
+//        vector<int> element;
+//        pushelements(element,&myfile);
+//        oneforall(element);
+//        element.clear();
+//        myfile.close();
+//        cout<<"----------------------"<<i<<endl;
+//    }
+    ofstream swapoutfile;
+    ofstream compoutfile;
+    ofstream timeoutfile;
+    swapoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\swap.csv",ios::app);
+    compoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\comp.csv",ios::app);
+    timeoutfile.open("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\time.csv",ios::app);
+    myfile.open(("C:\\Users\\MHI\\CLionProjects\\PAA\\Aleatorios\\a" + strings.at(15)));
+    unsigned long long int swap,comp;
+    double time;
+    clock_t start,end;
+    swap=0;comp=0;time=0.0;
+    vector<int> vetor;
+    pushelements(vetor,&myfile);
+//    start = clock();
+//    mergeSort(vetor,0,vetor.size(), swap, comp);
+//    end = clock();
+//    time = (double) (end-start) / CLOCKS_PER_SEC;
+//    swapoutfile<<swap<<";";
+//    compoutfile<<comp<<";";
+//    timeoutfile<<time<<";";
+//    cout<<swap<<" | "<<comp<<" | "<<time<<endl;
+//    cout<<"feito p/ mergeSort"<<endl;
+    vector<int> test={10,20,30,40,50,60,70};
+    copy(vetor,test);
+    test[2]=123132;
+    for (int i = 0; i < vetor.size(); ++i) {
+        cout<<vetor[i]<<" ";
     }
 
     return 0;
